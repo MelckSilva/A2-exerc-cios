@@ -29,7 +29,7 @@
 import os
 import json
 from openai import OpenAI
-from tools import consultar_status_pedido, gerar_boleto, agendar_consulta, somar, multiplicar, subtrair, divisao
+from tools import consultar_status_pedido, gerar_boleto, agendar_consulta, somar, multiplicar, subtrair, divisao, celsius_para_fahrenheit, fahrenheit_para_celsius
 from dotenv import load_dotenv
 from groq import Groq
 
@@ -56,6 +56,7 @@ tools = [
             }
         }
     },
+
     {
         "type": "function",
         "function": {
@@ -74,6 +75,23 @@ tools = [
                     }
                 },
                 "required": ["a","b"]
+            }
+        }
+    },
+        {
+        "type": "function",
+        "function": {
+            "name": "fahrenheit_para_celsius",
+            "description": "converter fahrenheit para celsius",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "a": {
+                        "type": "integer",
+                        "description": "Valor de celsius"
+                    },
+                },
+                "required": ["a"]
             }
         }
     },
@@ -161,6 +179,23 @@ tools = [
             }
         }
     },
+          {
+        "type": "function",
+        "function": {
+            "name": "celsius_para_fahrenheit",
+            "description": "converter celsius para fahrenheit",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "a": {
+                        "type": "integer",
+                        "description": "Valor de celsius"
+                    },
+                },
+                "required": ["a"]
+            }
+        }
+    },
     {
         "type": "function",
         "function": {
@@ -236,11 +271,17 @@ def perguntar(pergunta: str):
         if tool_name == "subtrair":
             return subtrair(**args)
         
-        if tool_name == "dividir":
+        if tool_name == "divisao":
             return divisao(**args)
+        
+        if tool_name == "celsius_para_fahrenheit":
+            return celsius_para_fahrenheit(**args)
+        
+        if tool_name == "fahrenheit_para_celsius":
+            return fahrenheit_para_celsius(**args)
         
 
     return message.content
 
 
-print(perguntar("dividir 26 por 4"))
+print(perguntar("Converter 30 Fahrenheit para Celsius "))

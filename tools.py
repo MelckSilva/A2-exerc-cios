@@ -23,3 +23,9 @@ def subtrair(a, b):
 
 def divisao(a,b):
     return a / b
+
+def celsius_para_fahrenheit(a):
+    return (a*1.8) + 32
+
+def fahrenheit_para_celsius(a):
+    return (a-32) / 1.8
