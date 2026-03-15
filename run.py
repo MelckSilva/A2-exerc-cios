@@ -295,7 +295,7 @@ tools = [
                 "required": ["cidade"]
             }
         }
-    }
+    },
     {
         "type": "function",
         "function": {
