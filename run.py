@@ -29,7 +29,7 @@
 import os
 import json
 from openai import OpenAI
-from tools import consultar_status_pedido, gerar_boleto, agendar_consulta, somar, multiplicar, subtrair, divisao, celsius_para_fahrenheit, fahrenheit_para_celsius
+from tools import consultar_status_pedido, gerar_boleto, agendar_consulta, somar, multiplicar, subtrair, divisao, celsius_para_fahrenheit, fahrenheit_para_celsius, buscar_produto, verificar_estoque, criar_evento, listar_eventos, buscar_clima
 from dotenv import load_dotenv
 from groq import Groq
 
@@ -216,6 +216,89 @@ tools = [
     {
         "type": "function",
         "function": {
+            "name": "buscar_produto",
+            "description": "Busca informações ou preço de um produto",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "nome_produto": {
+                        "type": "string",
+                        "description": "Nome do produto a ser consultado"
+                    }
+                },
+                "required": ["nome_produto"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "verificar_estoque",
+            "description": "Verifica a quantidade disponível de um produto no estoque",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "nome_produto": {
+                        "type": "string",
+                        "description": "Nome do produto a ser consultado no estoque"
+                    }
+                },
+                "required": ["nome_produto"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "criar_evento",
+            "description": "Cria um evento na agenda",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "titulo": {
+                        "type": "string",
+                        "description": "Título do evento"
+                    },
+                    "data": {
+                        "type": "string",
+                        "description": "Data do evento"
+                    }
+                },
+                "required": ["titulo", "data"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "listar_eventos",
+            "description": "Lista os eventos da agenda",
+            "parameters": {
+                "type": "object",
+                "properties": {}
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "buscar_clima",
+            "description": "Busca o clima atual de uma cidade",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "cidade": {
+                        "type": "string",
+                        "description": "Nome da cidade a ser consultada"
+                    }
+                },
+                "required": ["cidade"]
+            }
+        }
+    }
+    {
+        "type": "function",
+        "function": {
             "name": "agendar_consulta",
             "description": "Agenda uma consulta",
             "parameters": {
@@ -279,6 +362,21 @@ def perguntar(pergunta: str):
         
         if tool_name == "fahrenheit_para_celsius":
             return fahrenheit_para_celsius(**args)
+        
+        if tool_name == "buscar_produto":
+            return buscar_produto(**args)
+        
+        if tool_name == "verificar_estoque":
+            return verificar_estoque(**args)
+        
+        if tool_name == "criar_evento":
+            return criar_evento(**args)
+        
+        if tool_name == "listar_eventos":
+            return listar_eventos(**args)
+        
+        if tool_name == "buscar_clima":
+            return buscar_clima(**args)
         
 
     return message.content
